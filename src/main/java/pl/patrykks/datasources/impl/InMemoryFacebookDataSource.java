@@ -1,8 +1,8 @@
-package pl.patrykks.dao.impl;
+package pl.patrykks.datasources.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.patrykks.dao.FacebookDAO;
+import pl.patrykks.datasources.FacebookDataSource;
 import pl.patrykks.domain.Facebook;
 import pl.patrykks.exceptions.NotFoundException;
 
@@ -11,11 +11,11 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-public class FlatFileFacebookDAO implements FacebookDAO {
-    private static final Logger logger = LoggerFactory.getLogger(FlatFileFacebookDAO.class);
+public class InMemoryFacebookDataSource implements FacebookDataSource {
+    private static final Logger logger = LoggerFactory.getLogger(InMemoryFacebookDataSource.class);
     private SortedMap<String, Facebook> facebookProfilesDataSource;
 
-    public FlatFileFacebookDAO() {
+    public InMemoryFacebookDataSource() {
         facebookProfilesDataSource = new TreeMap<>();
     }
 

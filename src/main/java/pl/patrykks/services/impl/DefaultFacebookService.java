@@ -1,12 +1,12 @@
-package pl.patrykks.service.impl;
+package pl.patrykks.services.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.patrykks.dao.FacebookDAO;
+import pl.patrykks.datasources.FacebookDataSource;
 import pl.patrykks.domain.Facebook;
 import pl.patrykks.domain.Post;
 import pl.patrykks.exceptions.NotFoundException;
-import pl.patrykks.service.FacebookService;
+import pl.patrykks.services.FacebookService;
 
 import java.util.*;
 import java.util.function.Function;
@@ -17,19 +17,19 @@ import static java.util.stream.Collectors.summingLong;
 
 public class DefaultFacebookService implements FacebookService {
     private static final Logger logger = LoggerFactory.getLogger(DefaultFacebookService.class);
-    private FacebookDAO dao;
+    private FacebookDataSource facebookDataSource;
 
-    public DefaultFacebookService(FacebookDAO dao) {
-        this.dao = dao;
+    public DefaultFacebookService(FacebookDataSource facebookDataSource) {
+        this.facebookDataSource = facebookDataSource;
     }
 
     public Facebook findById(String id) throws NotFoundException {
-        return dao.findById(id);
+        return facebookDataSource.findById(id);
     }
 
     public Map<String, Long> findMostCommonWords() {
         logger.debug("Generating the word frequency histogram using posts content");
-        return dao.findAll().stream().
+        return facebookDataSource.findAll().stream().
                 flatMap(facebook -> facebook.getPosts().stream()).
                 flatMap(post -> Arrays.stream(post.getMessage().split("\\s+"))).
                 collect(groupingBy(Function.identity(), summingLong(e -> 1)));
@@ -37,7 +37,7 @@ public class DefaultFacebookService implements FacebookService {
 
     public Set<String> findPostIdsByKeyword(String word) {
         logger.debug("Finding ids of posts containg word: {}", word);
-        return dao.findAll().stream().
+        return facebookDataSource.findAll().stream().
                 flatMap(facebook -> facebook.getPosts().stream()).
                 filter(post -> post.getMessage().contains(word)).
                 map(Post::getId).
@@ -50,7 +50,7 @@ public class DefaultFacebookService implements FacebookService {
                 .thenComparing(Comparator.comparing(Facebook::getFirstname));
 
         SortedSet<Facebook> sortedFacebookProfiles = new TreeSet<>(personComparator);
-        sortedFacebookProfiles.addAll(dao.findAll());
+        sortedFacebookProfiles.addAll(facebookDataSource.findAll());
 
         return sortedFacebookProfiles;
 

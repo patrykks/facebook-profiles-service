@@ -2,13 +2,13 @@ package pl.patrykks.main;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.patrykks.dao.FacebookDAO;
-import pl.patrykks.dao.impl.FlatFileFacebookDAO;
+import pl.patrykks.datasources.FacebookDataSource;
+import pl.patrykks.datasources.impl.InMemoryFacebookDataSource;
 import pl.patrykks.domain.Facebook;
 import pl.patrykks.mapping.FacebookJsonToObjectMapper;
 import pl.patrykks.exceptions.NotFoundException;
-import pl.patrykks.service.FacebookService;
-import pl.patrykks.service.impl.DefaultFacebookService;
+import pl.patrykks.services.FacebookService;
+import pl.patrykks.services.impl.DefaultFacebookService;
 
 import java.io.InputStream;
 import java.util.Optional;
@@ -24,16 +24,16 @@ public class ServiceUsageExample {
             "sample-data/f5.json"};
 
     public static void main(String[] args) throws NotFoundException {
-        FacebookDAO facebookDAO = new FlatFileFacebookDAO();
+        FacebookDataSource facebookDataSource = new InMemoryFacebookDataSource();
         FacebookJsonToObjectMapper facebookMapper = new FacebookJsonToObjectMapper();
 
-        for (String profileFile : PROFILE_FILES) {
-            String stringifiedFacebookProfile = readFile(profileFile);
+        for (String fileWithProfile : PROFILE_FILES) {
+            String stringifiedFacebookProfile = readFile(fileWithProfile);
             Optional<Facebook> facebookProfile = facebookMapper.map(stringifiedFacebookProfile);
-            facebookProfile.ifPresent(facebookDAO::insert);
+            facebookProfile.ifPresent(facebookDataSource::insert);
         }
 
-        FacebookService facebookService = new DefaultFacebookService(facebookDAO);
+        FacebookService facebookService = new DefaultFacebookService(facebookDataSource);
         facebookService.findAll().stream().map(Facebook::toString).forEach(logger::info);
     }
 
