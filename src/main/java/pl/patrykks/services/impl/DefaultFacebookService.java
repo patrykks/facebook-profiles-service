@@ -31,7 +31,10 @@ public class DefaultFacebookService implements FacebookService {
         logger.debug("Generating the word frequency histogram using posts content");
         return facebookDataSource.findAll().stream().
                 flatMap(facebook -> facebook.getPosts().stream()).
-                flatMap(post -> Arrays.stream(post.getMessage().split("\\s+"))).
+                flatMap(post -> Arrays.stream(
+                        post.getMessage().
+                                toLowerCase().
+                                split("\\W+"))).
                 collect(groupingBy(Function.identity(), summingLong(e -> 1)));
     }
 
@@ -39,7 +42,10 @@ public class DefaultFacebookService implements FacebookService {
         logger.debug("Finding ids of posts containg word: {}", word);
         return facebookDataSource.findAll().stream().
                 flatMap(facebook -> facebook.getPosts().stream()).
-                filter(post -> post.getMessage().contains(word)).
+                filter(post ->
+                        post.getMessage().
+                                toLowerCase().
+                                matches(".*\\b" + word.toLowerCase() + "\\b.*")).
                 map(Post::getId).
                 collect(Collectors.toSet());
     }
