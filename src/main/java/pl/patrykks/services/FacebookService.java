@@ -1,4 +1,4 @@
-package pl.patrykks.service;
+package pl.patrykks.services;
 
 import pl.patrykks.domain.Facebook;
 import pl.patrykks.exceptions.NotFoundException;
