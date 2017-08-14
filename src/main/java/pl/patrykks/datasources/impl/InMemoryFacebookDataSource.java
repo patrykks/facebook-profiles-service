@@ -26,6 +26,12 @@ public class InMemoryFacebookDataSource implements FacebookDataSource {
 
     public Facebook findById(String id) throws NotFoundException {
         logger.debug("Finding facebook profile with id: {}", id);
+
+        if (id == null) {
+            logger.warn("Trying to find facebook profile with id: {}", id);
+            throw new NotFoundException();
+        }
+
         Facebook facebook = facebookProfilesDataSource.get(id);
 
         if (facebook == null) {
@@ -39,6 +45,12 @@ public class InMemoryFacebookDataSource implements FacebookDataSource {
 
     public void insert(Facebook facebook) {
         logger.debug("Inserting facebook profile with id: {}", facebook.getId());
+
+        if (facebook.getId() == null) {
+            logger.warn("Cannot insert facebook profile with id: {}", facebook.getId());
+            return;
+        }
+
         facebookProfilesDataSource.put(facebook.getId(), facebook);
     }
 }
