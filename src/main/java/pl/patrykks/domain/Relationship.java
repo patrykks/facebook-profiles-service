@@ -8,9 +8,10 @@ import java.util.Map;
 
 public enum Relationship {
     MARRIED,
-    SINGLE;
+    SINGLE,
+    UNKNOWN;
 
-    private static Map<String, Relationship> namesMap = new HashMap<>(2);
+    private static final Map<String, Relationship> namesMap = new HashMap<>(2);
 
     static {
         namesMap.put("married", MARRIED);
@@ -19,7 +20,7 @@ public enum Relationship {
 
     @JsonCreator
     public static Relationship forValue(String value) {
-        return namesMap.get(value.toLowerCase());
+        return namesMap.getOrDefault(value.toLowerCase(), UNKNOWN);
     }
 
     @JsonValue
@@ -27,6 +28,6 @@ public enum Relationship {
         return namesMap.entrySet().stream().
                 filter(entry -> entry.getValue() == this).
                 map(Map.Entry::getKey).
-                findFirst().orElse(null);
+                findFirst().orElse("unknown");
     }
 }

@@ -10,6 +10,7 @@ import pl.patrykks.exceptions.NotFoundException;
 import pl.patrykks.services.FacebookService;
 import pl.patrykks.services.impl.DefaultFacebookService;
 
+import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.Scanner;
@@ -45,6 +46,10 @@ public class ServiceUsageExample {
             throw new RuntimeException("JSON file containing input data cannot be found");
         }
 
-        return new Scanner(inputStream).useDelimiter("\\A").next();
+        Scanner scanner = new Scanner(new BufferedInputStream(inputStream));
+        String fileContent = scanner.useDelimiter("\\Z").next();
+        scanner.close();
+
+        return fileContent;
     }
 }

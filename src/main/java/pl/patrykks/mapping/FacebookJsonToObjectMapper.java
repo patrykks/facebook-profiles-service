@@ -1,7 +1,9 @@
 package pl.patrykks.mapping;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.patrykks.domain.Facebook;
@@ -14,7 +16,10 @@ public class FacebookJsonToObjectMapper {
     private ObjectReader jsonToObjectFacebookReader;
 
     public FacebookJsonToObjectMapper() {
-        jsonToObjectFacebookReader = new ObjectMapper().readerFor(Facebook.class);
+        jsonToObjectFacebookReader = new ObjectMapper().
+                registerModule(new JavaTimeModule()).
+                disable(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS).
+                readerFor(Facebook.class);
     }
 
     public Optional<Facebook> map(String stringifiedJsonOfFacebook) {

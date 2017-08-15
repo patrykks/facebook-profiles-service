@@ -8,9 +8,10 @@ import java.util.Map;
 
 public enum Gender {
     MALE,
-    FEMALE;
+    FEMALE,
+    UNKNOWN;
 
-    private static Map<String, Gender> namesMap = new HashMap<>(2);
+    private static final Map<String, Gender> namesMap = new HashMap<>(2);
 
     static {
         namesMap.put("male", MALE);
@@ -19,7 +20,7 @@ public enum Gender {
 
     @JsonCreator
     public static Gender forValue(String value) {
-        return namesMap.get(value.toLowerCase());
+        return namesMap.getOrDefault(value.toLowerCase(), UNKNOWN);
     }
 
     @JsonValue
@@ -27,6 +28,6 @@ public enum Gender {
         return namesMap.entrySet().stream().
                 filter(entry -> entry.getValue() == this).
                 map(Map.Entry::getKey).
-                findFirst().orElse(null);
+                findFirst().orElse("unknown");
     }
 }
