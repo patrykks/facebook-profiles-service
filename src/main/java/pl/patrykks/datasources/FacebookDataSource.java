@@ -1,14 +1,14 @@
 package pl.patrykks.datasources;
 
-import pl.patrykks.domain.Facebook;
+import pl.patrykks.domain.FacebookProfile;
 import pl.patrykks.exceptions.NotFoundException;
 
 import java.util.Set;
 
 public interface FacebookDataSource {
-    Set<Facebook> findAll();
+    Set<FacebookProfile> findAll();
 
-    Facebook findById(String id) throws NotFoundException;
+    FacebookProfile findById(String id) throws NotFoundException;
 
-    void insert(Facebook facebook);
+    void insert(FacebookProfile profile);
 }

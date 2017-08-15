@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Facebook {
+public class FacebookProfile {
     @JsonProperty(value = "id")
     private String id;
 
@@ -47,7 +47,7 @@ public class Facebook {
     @JsonProperty(value = "posts")
     private List<Post> posts;
 
-    public Facebook() {
+    public FacebookProfile() {
     }
 
     public String getId() {
@@ -147,13 +147,13 @@ public class Facebook {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
 
-        Facebook facebook = (Facebook) o;
+        FacebookProfile otherProfile = (FacebookProfile) other;
 
-        return getId() != null ? getId().equals(facebook.getId()) : facebook.getId() == null;
+        return getId() != null ? getId().equals(otherProfile.getId()) : otherProfile.getId() == null;
     }
 
     @Override
@@ -163,7 +163,7 @@ public class Facebook {
 
     @Override
     public String toString() {
-        return "Facebook{" +
+        return "FacebookProfile{" +
                 "id='" + id + '\'' +
                 ", birthday=" + birthday +
                 ", firstname='" + firstname + '\'' +

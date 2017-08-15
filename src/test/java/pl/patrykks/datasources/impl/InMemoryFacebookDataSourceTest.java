@@ -3,7 +3,7 @@ package pl.patrykks.datasources.impl;
 import org.junit.Before;
 import org.junit.Test;
 import pl.patrykks.datasources.FacebookDataSource;
-import pl.patrykks.domain.Facebook;
+import pl.patrykks.domain.FacebookProfile;
 import pl.patrykks.exceptions.NotFoundException;
 
 import static org.junit.Assert.assertEquals;
@@ -21,11 +21,11 @@ public class InMemoryFacebookDataSourceTest {
     @Test
     public void inMemeryFacebookDataSourceShouldBeAbleToFindProfile()  {
         //given
-        Facebook facebook = mock(Facebook.class);
-        when(facebook.getId()).thenReturn("1");
+        FacebookProfile profile = mock(FacebookProfile.class);
+        when(profile.getId()).thenReturn("1");
 
         //when
-        facebookDataSource.insert(facebook);
+        facebookDataSource.insert(profile);
 
         //then
         assertEquals("1", facebookDataSource.findAll().stream().findAny().get().getId());
@@ -34,11 +34,11 @@ public class InMemoryFacebookDataSourceTest {
     @Test
     public void inMemeryFacebookDataSourceShouldNotInsertFacebookWithNullId()  {
         //given
-        Facebook facebook = mock(Facebook.class);
-        when(facebook.getId()).thenReturn(null);
+        FacebookProfile profile = mock(FacebookProfile.class);
+        when(profile.getId()).thenReturn(null);
 
         //when
-        facebookDataSource.insert(facebook);
+        facebookDataSource.insert(profile);
 
         //then
         assertEquals(0, facebookDataSource.findAll().size());
