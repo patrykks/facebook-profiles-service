@@ -3,7 +3,7 @@ package pl.patrykks.datasources.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.patrykks.datasources.FacebookDataSource;
-import pl.patrykks.domain.Facebook;
+import pl.patrykks.domain.FacebookProfile;
 import pl.patrykks.exceptions.NotFoundException;
 
 import java.util.HashSet;
@@ -13,18 +13,18 @@ import java.util.TreeMap;
 
 public class InMemoryFacebookDataSource implements FacebookDataSource {
     private static final Logger logger = LoggerFactory.getLogger(InMemoryFacebookDataSource.class);
-    private SortedMap<String, Facebook> facebookProfilesDataSource;
+    private SortedMap<String, FacebookProfile> facebookProfiles;
 
     public InMemoryFacebookDataSource() {
-        facebookProfilesDataSource = new TreeMap<>();
+        facebookProfiles = new TreeMap<>();
     }
 
-    public Set<Facebook> findAll() {
+    public Set<FacebookProfile> findAll() {
         logger.debug("Fetching all stored facebook profiles");
-        return new HashSet<>(facebookProfilesDataSource.values());
+        return new HashSet<>(facebookProfiles.values());
     }
 
-    public Facebook findById(String id) throws NotFoundException {
+    public FacebookProfile findById(String id) throws NotFoundException {
         logger.debug("Finding facebook profile with id: {}", id);
 
         if (id == null) {
@@ -32,25 +32,25 @@ public class InMemoryFacebookDataSource implements FacebookDataSource {
             throw new NotFoundException();
         }
 
-        Facebook facebook = facebookProfilesDataSource.get(id);
+        FacebookProfile profile = facebookProfiles.get(id);
 
-        if (facebook == null) {
+        if (profile == null) {
             logger.info("Facebook profile with id: {} cannot be found", id);
             throw new NotFoundException();
         }
 
         logger.debug("Facebook profile with id: {} was found", id);
-        return facebook;
+        return profile;
     }
 
-    public void insert(Facebook facebook) {
-        logger.debug("Inserting facebook profile with id: {}", facebook.getId());
+    public void insert(FacebookProfile profile) {
+        logger.debug("Inserting facebook profile with id: {}", profile.getId());
 
-        if (facebook.getId() == null) {
-            logger.warn("Cannot insert facebook profile with id: {}", facebook.getId());
+        if (profile.getId() == null) {
+            logger.warn("Cannot insert facebook profile with id: {}", profile.getId());
             return;
         }
 
-        facebookProfilesDataSource.put(facebook.getId(), facebook);
+        facebookProfiles.put(profile.getId(), profile);
     }
 }

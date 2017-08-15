@@ -2,7 +2,7 @@ package pl.patrykks.services.impl;
 
 import org.junit.Test;
 import pl.patrykks.datasources.FacebookDataSource;
-import pl.patrykks.domain.Facebook;
+import pl.patrykks.domain.FacebookProfile;
 import pl.patrykks.domain.Post;
 import pl.patrykks.services.FacebookService;
 
@@ -21,18 +21,18 @@ public class DefaultFacebookServiceTest {
         String [] firstNames = {"A","B","C"};
         String [] lastNames = {"F","F","E"};
 
-        Set<Facebook> facebookSet = prepareFacebookSetToCheckSorting(ids, firstNames, lastNames);
+        Set<FacebookProfile> unsortedProfiles = prepareFacebookProfilesToCheckSorting(ids, firstNames, lastNames);
         FacebookDataSource facebookDataSource = mock(FacebookDataSource.class);
-        when(facebookDataSource.findAll()).thenReturn(facebookSet);
+        when(facebookDataSource.findAll()).thenReturn(unsortedProfiles);
         FacebookService facebookService = new DefaultFacebookService(facebookDataSource);
 
         //when
-        List<Facebook> sortedFacebookProfiles = new ArrayList<>(facebookService.findAll());
+        List<FacebookProfile> sortedProfiles = new ArrayList<>(facebookService.findAll());
 
         //then
-        assertEquals("3", sortedFacebookProfiles.get(0).getId());
-        assertEquals("1", sortedFacebookProfiles.get(1).getId());
-        assertEquals("2", sortedFacebookProfiles.get(2).getId());
+        assertEquals("3", sortedProfiles.get(0).getId());
+        assertEquals("1", sortedProfiles.get(1).getId());
+        assertEquals("2", sortedProfiles.get(2).getId());
     }
 
     @Test
@@ -45,9 +45,9 @@ public class DefaultFacebookServiceTest {
                 "What a great picture, what great sound.! No more glare.!!!! I love this TV.",
                 "We definitely wound up with buyers remorse once we got it home and set up."};
 
-        Set<Facebook> facebookSet = prepareFacebookSetWithPosts(ids, postsIds, postMessages);
+        Set<FacebookProfile> profiles = prepareFacebookProfilesWithPosts(ids, postsIds, postMessages);
         FacebookDataSource facebookDataSource = mock(FacebookDataSource.class);
-        when(facebookDataSource.findAll()).thenReturn(facebookSet);
+        when(facebookDataSource.findAll()).thenReturn(profiles);
         FacebookService facebookService = new DefaultFacebookService(facebookDataSource);
 
         //when
@@ -66,9 +66,9 @@ public class DefaultFacebookServiceTest {
         String [] postsIds = {"10"};
         String [] postMessages = {"Picture is beautiful. It is the most beautifull picture I have ever seen!!!"};
 
-        Set<Facebook> facebookSet = prepareFacebookSetWithPosts(ids, postsIds, postMessages);
+        Set<FacebookProfile> profiles = prepareFacebookProfilesWithPosts(ids, postsIds, postMessages);
         FacebookDataSource facebookDataSource = mock(FacebookDataSource.class);
-        when(facebookDataSource.findAll()).thenReturn(facebookSet);
+        when(facebookDataSource.findAll()).thenReturn(profiles);
         FacebookService facebookService = new DefaultFacebookService(facebookDataSource);
 
         //when
@@ -85,9 +85,9 @@ public class DefaultFacebookServiceTest {
         String [] postsIds = {"10"};
         String [] postMessages = {"Picture is beautiful. It is the most beautiful picture I have ever seen!!!"};
 
-        Set<Facebook> facebookSet = prepareFacebookSetWithPosts(ids, postsIds, postMessages);
+        Set<FacebookProfile> profiles = prepareFacebookProfilesWithPosts(ids, postsIds, postMessages);
         FacebookDataSource facebookDataSource = mock(FacebookDataSource.class);
-        when(facebookDataSource.findAll()).thenReturn(facebookSet);
+        when(facebookDataSource.findAll()).thenReturn(profiles);
         FacebookService facebookService = new DefaultFacebookService(facebookDataSource);
 
         //when
@@ -97,35 +97,35 @@ public class DefaultFacebookServiceTest {
         assertEquals(wordFrequencyMap.values().size(), 10);
     }
 
-    private Set<Facebook> prepareFacebookSetToCheckSorting(String [] ids, String [] firstNames, String [] lastNames) {
-        Set<Facebook> facebookSet = new HashSet<>();
+    private Set<FacebookProfile> prepareFacebookProfilesToCheckSorting(String [] ids, String [] firstNames, String [] lastNames) {
+        Set<FacebookProfile> profiles = new HashSet<>();
 
         for (int index = 0; index < ids.length; index++) {
-            Facebook facebook = mock(Facebook.class);
-            when(facebook.getId()).thenReturn(ids[index]);
-            when(facebook.getLastname()).thenReturn(lastNames[index]);
-            when(facebook.getFirstname()).thenReturn(firstNames[index]);
-            facebookSet.add(facebook);
+            FacebookProfile profile = mock(FacebookProfile.class);
+            when(profile.getId()).thenReturn(ids[index]);
+            when(profile.getLastname()).thenReturn(lastNames[index]);
+            when(profile.getFirstname()).thenReturn(firstNames[index]);
+            profiles.add(profile);
         }
 
-        return facebookSet;
+        return profiles;
     }
 
-    private Set<Facebook> prepareFacebookSetWithPosts(String [] ids, String [] postsIds, String [] postMessages) {
-        Set<Facebook> facebookSet = new HashSet<>();
+    private Set<FacebookProfile> prepareFacebookProfilesWithPosts(String [] ids, String [] postsIds, String [] postMessages) {
+        Set<FacebookProfile> profiles = new HashSet<>();
 
         for (int index = 0; index < ids.length; index++) {
-            Facebook facebook = mock(Facebook.class);
+            FacebookProfile profile = mock(FacebookProfile.class);
             Post post = mock(Post.class);
             List<Post> posts = Collections.singletonList(post);
 
-            when(facebook.getId()).thenReturn(ids[index]);
+            when(profile.getId()).thenReturn(ids[index]);
             when(post.getId()).thenReturn(postsIds[index]);
             when(post.getMessage()).thenReturn(postMessages[index]);
-            when(facebook.getPosts()).thenReturn(posts);
-            facebookSet.add(facebook);
+            when(profile.getPosts()).thenReturn(posts);
+            profiles.add(profile);
         }
 
-        return facebookSet;
+        return profiles;
     }
 }

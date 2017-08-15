@@ -3,7 +3,7 @@ package pl.patrykks.services.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.patrykks.datasources.FacebookDataSource;
-import pl.patrykks.domain.Facebook;
+import pl.patrykks.domain.FacebookProfile;
 import pl.patrykks.domain.Post;
 import pl.patrykks.exceptions.NotFoundException;
 import pl.patrykks.services.FacebookService;
@@ -23,14 +23,14 @@ public class DefaultFacebookService implements FacebookService {
         this.facebookDataSource = facebookDataSource;
     }
 
-    public Facebook findById(String id) throws NotFoundException {
+    public FacebookProfile findById(String id) throws NotFoundException {
         return facebookDataSource.findById(id);
     }
 
     public Map<String, Long> findMostCommonWords() {
         logger.debug("Generating the word frequency histogram using posts content");
         return facebookDataSource.findAll().stream().
-                flatMap(facebook -> facebook.getPosts().stream()).
+                flatMap(profile -> profile.getPosts().stream()).
                 flatMap(post -> Arrays.stream(
                         post.getMessage().
                                 toLowerCase().
@@ -41,7 +41,7 @@ public class DefaultFacebookService implements FacebookService {
     public Set<String> findPostIdsByKeyword(String word) {
         logger.debug("Finding ids of posts containg word: {}", word);
         return facebookDataSource.findAll().stream().
-                flatMap(facebook -> facebook.getPosts().stream()).
+                flatMap(profile -> profile.getPosts().stream()).
                 filter(post ->
                         post.getMessage().
                                 toLowerCase().
@@ -50,15 +50,15 @@ public class DefaultFacebookService implements FacebookService {
                 collect(Collectors.toSet());
     }
 
-    public SortedSet<Facebook> findAll() {
+    public SortedSet<FacebookProfile> findAll() {
         logger.debug("Finding all stored facebook profiles");
-        Comparator<Facebook> personComparator = Comparator.comparing(Facebook::getLastname)
-                .thenComparing(Comparator.comparing(Facebook::getFirstname));
+        Comparator<FacebookProfile> personComparator = Comparator.comparing(FacebookProfile::getLastname)
+                .thenComparing(Comparator.comparing(FacebookProfile::getFirstname));
 
-        SortedSet<Facebook> sortedFacebookProfiles = new TreeSet<>(personComparator);
-        sortedFacebookProfiles.addAll(facebookDataSource.findAll());
+        SortedSet<FacebookProfile> sortedProfiles = new TreeSet<>(personComparator);
+        sortedProfiles.addAll(facebookDataSource.findAll());
 
-        return sortedFacebookProfiles;
+        return sortedProfiles;
 
     }
 }
