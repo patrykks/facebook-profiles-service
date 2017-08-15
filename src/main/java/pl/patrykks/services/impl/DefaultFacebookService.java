@@ -50,7 +50,7 @@ public class DefaultFacebookService implements FacebookService {
                 collect(Collectors.toSet());
     }
 
-    public Set<Facebook> findAll() {
+    public SortedSet<Facebook> findAll() {
         logger.debug("Finding all stored facebook profiles");
         Comparator<Facebook> personComparator = Comparator.comparing(Facebook::getLastname)
                 .thenComparing(Comparator.comparing(Facebook::getFirstname));

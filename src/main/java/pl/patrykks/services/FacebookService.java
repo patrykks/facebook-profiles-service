@@ -5,6 +5,7 @@ import pl.patrykks.exceptions.NotFoundException;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 
 public interface FacebookService {
 
@@ -29,5 +30,5 @@ public interface FacebookService {
      *      * Zwraca zbiór obiektów reprezentujących profile Facebooka
      *      * posortowane po firstname, lastname
      */
-    Set<Facebook> findAll();
+    SortedSet<Facebook> findAll();
 }
