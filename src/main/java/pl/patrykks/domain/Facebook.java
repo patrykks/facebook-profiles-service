@@ -2,7 +2,7 @@ package pl.patrykks.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 public class Facebook {
@@ -10,7 +10,7 @@ public class Facebook {
     private String id;
 
     @JsonProperty(value = "birthday")
-    private Timestamp birthday;
+    private Instant birthday;
 
     @JsonProperty(value = "firstname")
     private String firstname;
@@ -56,11 +56,11 @@ public class Facebook {
         this.id = id;
     }
 
-    public Timestamp getBirthday() {
+    public Instant getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Timestamp birthday) {
+    public void setBirthday(Instant birthday) {
         this.birthday = birthday;
     }
 
