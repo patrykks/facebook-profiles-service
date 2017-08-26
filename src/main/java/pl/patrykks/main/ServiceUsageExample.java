@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.patrykks.datasources.FacebookDataSource;
 import pl.patrykks.datasources.impl.InMemoryFacebookDataSource;
-import pl.patrykks.domain.Facebook;
-import pl.patrykks.mapping.FacebookJsonToObjectMapper;
+import pl.patrykks.domain.FacebookProfile;
+import pl.patrykks.mapping.FacebookProfileObjectMapper;
 import pl.patrykks.exceptions.NotFoundException;
 import pl.patrykks.services.FacebookService;
 import pl.patrykks.services.impl.DefaultFacebookService;
@@ -26,16 +26,16 @@ public class ServiceUsageExample {
 
     public static void main(String[] args) throws NotFoundException {
         FacebookDataSource facebookDataSource = new InMemoryFacebookDataSource();
-        FacebookJsonToObjectMapper facebookMapper = new FacebookJsonToObjectMapper();
+        FacebookProfileObjectMapper facebookProfileMapper = new FacebookProfileObjectMapper();
 
         for (String fileWithProfile : PROFILE_FILES) {
             String stringifiedFacebookProfile = readFile(fileWithProfile);
-            Optional<Facebook> facebookProfile = facebookMapper.map(stringifiedFacebookProfile);
+            Optional<FacebookProfile> facebookProfile = facebookProfileMapper.map(stringifiedFacebookProfile);
             facebookProfile.ifPresent(facebookDataSource::insert);
         }
 
         FacebookService facebookService = new DefaultFacebookService(facebookDataSource);
-        facebookService.findAll().stream().map(Facebook::toString).forEach(logger::info);
+        facebookService.findAll().stream().map(FacebookProfile::toString).forEach(logger::info);
     }
 
     private static String readFile(String filePath) {

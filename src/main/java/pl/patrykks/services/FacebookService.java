@@ -1,10 +1,11 @@
 package pl.patrykks.services;
 
-import pl.patrykks.domain.Facebook;
+import pl.patrykks.domain.FacebookProfile;
 import pl.patrykks.exceptions.NotFoundException;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 
 public interface FacebookService {
 
@@ -12,7 +13,7 @@ public interface FacebookService {
      * Zwraca obiekt reprezentujący profil Facebooka na podstawie id
      *      * w czasie logarytmicznym
      */
-    Facebook findById(String id) throws NotFoundException;
+    FacebookProfile findById(String id) throws NotFoundException;
 
     /**
      * Zwraca mapę której kluczem jest słowo a wartością liczba jego
@@ -29,5 +30,5 @@ public interface FacebookService {
      *      * Zwraca zbiór obiektów reprezentujących profile Facebooka
      *      * posortowane po firstname, lastname
      */
-    Set<Facebook> findAll();
+    SortedSet<FacebookProfile> findAll();
 }

@@ -32,13 +32,13 @@ public class Post {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
 
-        Post post = (Post) o;
+        Post otherPost = (Post) other;
 
-        return getId() != null ? getId().equals(post.getId()) : post.getId() == null;
+        return getId() != null ? getId().equals(otherPost.getId()) : otherPost.getId() == null;
     }
 
     @Override
